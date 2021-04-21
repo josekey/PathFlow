@@ -5,5 +5,18 @@
 {% endblock %}
 
 {% block main %}
-    <p>Welcome</p>
+    <h1 class="display-1" style="text-align:center;"><b>Welcome</b></h1>
+    <br></br>
+    <div class="row" style="text-align:center;">
+        <div class="col">
+            <form action="/entry" method="GET">
+                <input type="submit"  value="Make New Entry">
+            </form>
+        </div>
+        <div class="col">
+            <form action="/past_entry" method="GET">
+                <input type="submit"  value="View Past Entry">
+            </form>
+        </div>
+    </div>
 {% endblock %}

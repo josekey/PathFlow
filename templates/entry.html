@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    New_Entry
+{% endblock %}
+
+{% block main %}
+<div class='container-xl'>
+    <div class="row align-items-start">
+        <div class="col">
+            <label for="specimen"><b>Specimen Type:</b></label>
+            <select name="specimen" id="specimen">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select> 
+        </div>
+        <div class="col">
+            <b>Checklist:</b>
+        </div>
+        <div class="col -md-4 ms-auto">
+            <input type="submit" value="Save and Exit">
+            <input type="submit" value="Save">
+            <input type="submit" value="Export">
+        </div>
+    </div>
+    <br><br>
+    <br><br>
+    <div class="row align-items-start">
+        <div class="col">
+            <textarea id="w3review" name="w3review" rows="8" cols="70">
+            </textarea>
+            <br><br>
+        </div>
+        <div class="col">
+            <p><b>Upload Image:</b></p>
+            <input type="file" value="image">
+        </div>
+    </div>
+</div>
+{% endblock %}

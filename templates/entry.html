@@ -5,48 +5,58 @@
 {% endblock %}
 
 {% block main %}
-<div class='container-xl'>
-    <div class="row align-items-start">
-        <div class="col">
-            <form method=POST action="/entry">
+<form action='/entry' method="POST">
+    <div class='container-xl'>
+        <!--First row -->
+        <div class="row align-items-start">
+            <!--specimen selection-->
+            <div class="col ">
                 <label for="specimen"><b>Specimen Type:</b></label>
-                <select name="specimen" id="specimen">
+                <select name="specimen" id="specimen" required>
+                    <option selected disabled></option>
                     {% for x in specimens %}
                         <option value='{{ x.specimen }}'>{{ x.specimen }}</option>
                     {% endfor %}
                     <option value='new'>New Specimen</option>
                 </select> 
-                <input type="submit" value="Confirm">
-            </form>
+            </div>
+            <!--specimen checklist-->
+            <div class="col">
+                <b>Checklist:</b>
+                <div id="checklist">  
+                </div> 
+                <br>
+                <button type="button" class="btn btn-light">Add</button>
+                <button type="button" class="btn btn-light">Remove</button>       
+            </div>
+            <!--save and submit buttons-->
+            <div class="col -md-4 ms-auto">
+                <input type="submit" class="btn btn-dark" value="Save and Exit">
+                <input type="submit" class="btn btn-dark" value="Save">
+                <input type="submit" class="btn btn-dark" value="Export">
+            </div>
         </div>
-        <div class="col">
-            <b>Checklist:</b>
-            <div id="checklist">
-                <input type="checkbox" value="1" id="1"/><label for="1">Default 1</label>   
-            </div>          
-        </div>
-        <div class="col -md-4 ms-auto">
-            <input type="submit" value="Save and Exit">
-            <input type="submit" value="Save">
-            <input type="submit" value="Export">
+
+        <br><br>
+        <br><br>
+
+        <!--second row -->
+        <div class="row align-items-start">
+            <!--gross text-->
+            <div class="col">
+                <textarea id="w3review" name="w3review" rows="8" cols="70" required>
+                </textarea>
+                <br><br>
+            </div>
+            <!--images-->
+            <div >
+                <p><b>Upload Image:</b></p>
+                <input type="file"  id="image_upload" />
+                
+            </div>
         </div>
     </div>
-
-    <br><br>
-    <br><br>
-
-    <div class="row align-items-start">
-        <div class="col">
-            <textarea id="w3review" name="w3review" rows="8" cols="70">
-            </textarea>
-            <br><br>
-        </div>
-        <div class="col">
-            <p><b>Upload Image:</b></p>
-            <input type="file" value="image">
-        </div>
-    </div>
-</div>
+</form>
 {% endblock %}
 
 {% block script %}
@@ -73,7 +83,7 @@
 
                 // add new list items
                 for(var i = 0; i < x.length; i++){
-                    $('<input />', { type: 'checkbox', id: i, value: x[i] }).appendTo(container);
+                    $('<input />', { type: 'checkbox', id: i, value: x[i], required: true }).appendTo(container);
                     $('<label />', { 'for': i, text: x[i] }).appendTo(container);
                     $('<br>').appendTo(container)
                 }

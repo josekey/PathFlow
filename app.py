@@ -3,6 +3,9 @@
 # web app libraries
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 
+# helper functions
+from helpers import load_specimens_TEST
+
 # error handeling
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -13,6 +16,10 @@ app.secret_key='hello'
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# loading in test data
+specs = load_specimens_TEST()
+
 
 # Ensure responses aren't cached
 @app.after_request
@@ -44,14 +51,22 @@ def entry():
     if request.method == "POST":
         return 'TODO'
     else:
-        return render_template('entry.html')
+        return render_template('entry.html', specimens=specs)
 
 @app.route("/past_entry", methods=["GET", "POST"])
 def past_entry():
     if request.method == "POST":
-        return 'TODO'
+        
+        return render_template('past_entry.html')
     else:
         return render_template('past_entry.html')
+
+@app.route("/test", methods=["GET", "POST"])
+def test():
+    if request.method == "POST":
+        return 'TODO'
+    else:
+        return render_template('test.html')
 
 # [https://flask.palletsprojects.com/en/1.1.x/errorhandling/]
 @app.errorhandler(Exception)

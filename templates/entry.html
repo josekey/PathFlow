@@ -10,10 +10,10 @@
         <div class="col">
             <label for="specimen"><b>Specimen Type:</b></label>
             <select name="specimen" id="specimen">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                {% for x in specimens %}
+                    <option value='{{ x.specimen }}'>{{ x.specimen }}</option>
+                {% endfor %}
+                <option value='new'>New Specimen</option>
             </select> 
         </div>
         <div class="col">

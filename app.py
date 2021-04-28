@@ -5,6 +5,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 
 # helper functions
 from helpers import load_specimens_TEST
+from json import dumps
 
 # error handeling
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -49,9 +50,12 @@ def login():
 @app.route("/entry", methods=["GET", "POST"])
 def entry():
     if request.method == "POST":
-        return 'TODO'
+        ### in post
+        s = request.form.get('specimen')
+        print(s)
+        return s
     else:
-        return render_template('entry.html', specimens=specs)
+        return render_template('entry.html', specimens=specs, j_spec = dumps(specs))
 
 @app.route("/past_entry", methods=["GET", "POST"])
 def past_entry():

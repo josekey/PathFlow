@@ -8,28 +8,22 @@
 <div class='container-xl'>
     <div class="row align-items-start">
         <div class="col">
-            <label for="specimen"><b>Specimen Type:</b></label>
-            <select name="specimen" id="specimen">
-                {% for x in specimens %}
-                    <option value='{{ x.specimen }}'>{{ x.specimen }}</option>
-                {% endfor %}
-                <option value='new'>New Specimen</option>
-            </select> 
+            <form method=POST action="/entry">
+                <label for="specimen"><b>Specimen Type:</b></label>
+                <select name="specimen" id="specimen">
+                    {% for x in specimens %}
+                        <option value='{{ x.specimen }}'>{{ x.specimen }}</option>
+                    {% endfor %}
+                    <option value='new'>New Specimen</option>
+                </select> 
+                <input type="submit" value="Confirm">
+            </form>
         </div>
         <div class="col">
             <b>Checklist:</b>
-            <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  Default checkbox
-                </label>
-              </div>
-              
+            <div id="checklist">
+                <input type="checkbox" value="1" id="1"/><label for="1">Default 1</label>   
+            </div>          
         </div>
         <div class="col -md-4 ms-auto">
             <input type="submit" value="Save and Exit">
@@ -53,4 +47,38 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // identify specimen dropdown
+            let specimen = document.querySelector('#specimen');
+
+            // see specimen change
+            specimen.addEventListener('change', function() {
+                // find checklist for new specimen
+                let s = specimen.value;
+                let temp = {{ specimens|tojson }};
+                var x = [];
+                for(var i = 0; i < temp.length; i++){
+                    if (temp[i].specimen == s){
+                        x = temp[i].checklist;
+                    }  
+                }
+                
+                let container = $(document.querySelector('#checklist'));
+                // remove current checklist items
+                container.empty();
+
+                // add new list items
+                for(var i = 0; i < x.length; i++){
+                    $('<input />', { type: 'checkbox', id: i, value: x[i] }).appendTo(container);
+                    $('<label />', { 'for': i, text: x[i] }).appendTo(container);
+                    $('<br>').appendTo(container)
+                }
+            });
+        });
+
+    </script>
 {% endblock %}

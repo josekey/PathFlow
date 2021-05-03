@@ -4,7 +4,7 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 
 # helper functions
-from helpers import load_specimens_TEST
+from helpers import load_specimens_TEST, short_analysis
 from json import dumps
 
 # error handeling
@@ -78,6 +78,8 @@ def test():
 @app.route("/speech_rec", methods=["GET", "POST"])
 def speech_rec():
     transcript = ""
+    t_analysis = ""
+
     if request.method == "POST":
         print("FORM DATA RECEIVED")
 
@@ -94,9 +96,9 @@ def speech_rec():
             with audioFile as source:
                 data = recognizer.record(source)
             transcript = recognizer.recognize_google(data, key=None)
-            t_analysis = transcript
+            t_analysis = short_analysis(transcript)
 
-    return render_template('speech_rec.html', transcript=transcript, t_analysis=transcript)
+    return render_template('speech_rec.html', transcript=transcript, t_analysis=t_analysis)
 
 # [https://flask.palletsprojects.com/en/1.1.x/errorhandling/]
 @app.errorhandler(Exception)

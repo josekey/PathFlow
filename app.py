@@ -11,6 +11,9 @@ from json import dumps
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
+#speech recognition
+import speech_recognition as sr
+
 # Configure application
 app = Flask(__name__)
 app.secret_key='hello'
@@ -71,6 +74,29 @@ def test():
         return 'TODO'
     else:
         return render_template('test.html')
+
+@app.route("/speech_rec", methods=["GET", "POST"])
+def speech_rec():
+    transcript = ""
+    if request.method == "POST":
+        print("FORM DATA RECEIVED")
+
+        if "file" not in request.files:
+            return redirect(request.url)
+
+        file = request.files["file"]
+        if file.filename == "":
+            return redirect(request.url)
+
+        if file:
+            recognizer = sr.Recognizer()
+            audioFile = sr.AudioFile(file)
+            with audioFile as source:
+                data = recognizer.record(source)
+            transcript = recognizer.recognize_google(data, key=None)
+            t_analysis = transcript
+
+    return render_template('speech_rec.html', transcript=transcript, t_analysis=transcript)
 
 # [https://flask.palletsprojects.com/en/1.1.x/errorhandling/]
 @app.errorhandler(Exception)

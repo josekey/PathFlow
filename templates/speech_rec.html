@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Speech Recognition Test</title>
+</head>
+<body>
+<div id="speechContainer">
+    <h1>Upload new File</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <br>
+        <input type="submit" id="submitButton" value="Transcribe"/>
+    </form>
+
+    {% if transcript != "" %}
+        <div id="speechTranscriptContainer">
+            <h1>Transcript</h1>
+            <p id="speechText">{{ transcript }}</p>
+            <h1>Highlights</h1>
+            <p id="speechAnalysis">{{ t_analysis }}</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+{% endblock %}

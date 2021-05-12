@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<form action='/entry' method="POST">
+<form action='/entry' method="POST" enctype=multipart/form-data>
     <div class='container-xl'>
         <!--First row -->
         <div class="row align-items-start">
@@ -44,9 +44,21 @@
         <div class="row align-items-start">
             <!--gross text-->
             <div class="col">
-                <textarea id="w3review" name="w3review" rows="8" cols="70" required>
-                </textarea>
+                <b>Text:</b><br><br>
+                <input type="file" name="file" id="input-file"/>
+                <br>
+                <input type="submit" id="submitButton" value="Analyze File"/>
                 <br><br>
+                <textarea id="gross" name="gross" placeholder='{{description}}' rows="8" cols="70" required></textarea>
+                {% if description != "" %}
+                    <div id="speechTranscriptContainer">
+                        
+                        <!--<p id="speechText">{{ description }}</p>-->
+                        <b>Highlights:</b>
+                        <p id="speechAnalysis"> <pre>{{ t_analysis }}</pre></p>
+                    </div>
+                {% endif %}
+
             </div>
             <!--images-->
             <div >
@@ -62,8 +74,13 @@
 {% block script %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // placeFileContent(document.getElementById('gross'),{{description|tojson}})
+            
             // identify specimen dropdown
             let specimen = document.querySelector('#specimen');
+
+            // identify file
+            let textfile = document.getElementById('input-file');
 
             // see specimen change
             specimen.addEventListener('change', function() {
@@ -88,6 +105,32 @@
                     $('<br>').appendTo(container)
                 }
             });
+
+            textfile.addEventListener('change', getFile)
+
+            function getFile(event) {
+                const input = event.target
+                if ('files' in input && input.files.length > 0) {
+                    placeFileContent(
+                    document.getElementById('gross'),
+                    input.files[0])
+                }
+            }
+
+            function placeFileContent(target, file) {
+                readFileContent(file).then(content => {
+                target.value = content
+                }).catch(error => console.log(error))
+            }
+
+            function readFileContent(file) {
+                const reader = new FileReader()
+                return new Promise((resolve, reject) => {
+                    reader.onload = event => resolve(event.target.result)
+                    reader.onerror = error => reject(error)
+                    reader.readAsText(file)
+                })
+            }
         });
 
     </script>

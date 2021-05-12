@@ -52,13 +52,57 @@ def login():
 
 @app.route("/entry", methods=["GET", "POST"])
 def entry():
+    text_file = ""
+    t_analysis = ""
+    
     if request.method == "POST":
-        ### in post
-        s = request.form.get('specimen')
-        print(s)
-        return s
+        # print('in post')
+        if "file" not in request.files:
+            # print('no file')
+            return redirect(request.url)
+
+        file = request.files["file"]
+        if file.filename == "":
+            # print('no file name')
+            return redirect(request.url)
+
+        if file:
+            text_file = file.read()
+            # print(text_file)
+            t_analysis = keyword_concord(str(text_file))
+
+            #t_analysis = short_analysis(transcript)
+        return render_template('entry.html', specimens=specs, j_spec = dumps(specs), description=text_file, t_analysis=t_analysis)
     else:
-        return render_template('entry.html', specimens=specs, j_spec = dumps(specs))
+        return render_template('entry.html', specimens=specs, j_spec = dumps(specs), description=text_file, t_analysis=t_analysis)
+
+@app.route("/text_rec", methods=["GET", "POST"])
+def text_rec():
+    text_file = ""
+    t_analysis = ""
+
+    if request.method == "POST":
+        print("FORM DATA RECEIVED")
+
+        if "file" not in request.files:
+            return redirect(request.url)
+
+        file = request.files["file"]
+        if file.filename == "":
+            return redirect(request.url)
+
+        if file:
+            print(file.filename)
+            text_file = file.read()
+            print('read')
+            t_analysis = keyword_concord(str(text_file))
+            # print(text_file)
+            print('read2')
+
+
+            # t_analysis = short_analysis(transcript)
+
+    return render_template('text_rec.html', description=literal_eval(text_file), t_analysis=t_analysis)
 
 @app.route("/past_entry", methods=["GET", "POST"])
 def past_entry():
@@ -99,36 +143,6 @@ def speech_rec():
             t_analysis = short_analysis(transcript)
 
     return render_template('speech_rec.html', transcript=transcript, t_analysis=t_analysis)
-
-@app.route("/text_rec", methods=["GET", "POST"])
-def text_rec():
-    text_file = ""
-    t_analysis = ""
-
-    if request.method == "POST":
-        print("FORM DATA RECEIVED")
-
-        if "file" not in request.files:
-            return redirect(request.url)
-
-        file = request.files["file"]
-        if file.filename == "":
-            return redirect(request.url)
-
-        if file:
-            print(file.filename)
-            text_file = file.read()
-            print('read')
-            t_analysis = keyword_concord(str(text_file))
-            #print(text_file)
-            print('read2')
-
-
-            #t_analysis = short_analysis(transcript)
-
-    return render_template('text_rec.html', description=text_file, t_analysis=t_analysis)
-
-
 
 
 # [https://flask.palletsprojects.com/en/1.1.x/errorhandling/]

@@ -4,7 +4,7 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 
 # helper functions
-from helpers import load_specimens_TEST, short_analysis
+from helpers import load_specimens_TEST, short_analysis, keyword_concord
 from json import dumps
 
 # error handeling
@@ -99,6 +99,37 @@ def speech_rec():
             t_analysis = short_analysis(transcript)
 
     return render_template('speech_rec.html', transcript=transcript, t_analysis=t_analysis)
+
+@app.route("/text_rec", methods=["GET", "POST"])
+def text_rec():
+    text_file = ""
+    t_analysis = ""
+
+    if request.method == "POST":
+        print("FORM DATA RECEIVED")
+
+        if "file" not in request.files:
+            return redirect(request.url)
+
+        file = request.files["file"]
+        if file.filename == "":
+            return redirect(request.url)
+
+        if file:
+            print(file.filename)
+            text_file = file.read()
+            print('read')
+            t_analysis = keyword_concord(str(text_file))
+            #print(text_file)
+            print('read2')
+
+
+            #t_analysis = short_analysis(transcript)
+
+    return render_template('text_rec.html', description=text_file, t_analysis=t_analysis)
+
+
+
 
 # [https://flask.palletsprojects.com/en/1.1.x/errorhandling/]
 @app.errorhandler(Exception)

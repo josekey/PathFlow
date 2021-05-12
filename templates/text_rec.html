@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Description Upload/Display Test</title>
+</head>
+<body>
+<!--Text Upload -->
+<div id="textCointainer">
+    <h1>Upload new File</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="input-file"/>
+        <br>
+        <input type="submit" id="submitButton" value="Upload Text"/>
+    </form>
+
+    <textarea id="content-target" rows="20" cols="150" required> </textarea>
+    
+    {% if description != "" %}
+        <div id="speechTranscriptContainer">
+            
+            <!--<p id="speechText">{{ description }}</p>-->
+            <h1>Highlights</h1>
+            <p id="speechAnalysis"> <pre>{{ t_analysis }}</pre></p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.getElementById('input-file')
+        .addEventListener('change', getFile)
+
+        function getFile(event) {
+            const input = event.target
+        if ('files' in input && input.files.length > 0) {
+            placeFileContent(
+            document.getElementById('content-target'),
+            input.files[0])
+        }
+        }
+
+        function placeFileContent(target, file) {
+            readFileContent(file).then(content => {
+            target.value = content
+        }).catch(error => console.log(error))
+        }
+
+        function readFileContent(file) {
+            const reader = new FileReader()
+        return new Promise((resolve, reject) => {
+            reader.onload = event => resolve(event.target.result)
+            reader.onerror = error => reject(error)
+            reader.readAsText(file)
+        })
+        }
+
+    </script>
+{% endblock %}

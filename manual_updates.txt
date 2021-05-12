@@ -1,9 +1,9 @@
 to app.py
 
+@app.route("/entry", methods=["GET", "POST"])
 def entry():
     text_file = ""
     t_analysis = ""
-    ret_check_text = ""
     
     if request.method == "POST":
         # print('in post')
@@ -19,16 +19,9 @@ def entry():
         if file:
             text_file = file.read()
             # print(text_file)
-            t_analysis, correct_dims = keyword_concord(str(text_file))
-            
-            ret_check_list = check_keywords(text)
-            if correct_dims:
-                ret_check_list.append('dimensions') 
-            
-            ret_check_text = ' '.join(map(str, ret_check_list))
-            
+            t_analysis, _ = keyword_concord(str(text_file))
 
             #t_analysis = short_analysis(transcript)
-        return render_template('entry.html', specimens=specs, j_spec = dumps(specs), description=text_file, t_analysis=t_analysis, check_list= ret_check_text)
+        return render_template('entry.html', specimens=specs, j_spec = dumps(specs), description=text_file, t_analysis=t_analysis)
     else:
         return render_template('entry.html', specimens=specs, j_spec = dumps(specs), description=text_file, t_analysis=t_analysis)

@@ -69,7 +69,7 @@ def entry():
         if file:
             text_file = file.read()
             # print(text_file)
-            t_analysis = keyword_concord(str(text_file))
+            t_analysis, _ = keyword_concord(str(text_file))
 
             #t_analysis = short_analysis(transcript)
         return render_template('entry.html', specimens=specs, j_spec = dumps(specs), description=text_file, t_analysis=t_analysis)
